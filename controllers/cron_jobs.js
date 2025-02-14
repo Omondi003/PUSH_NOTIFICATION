@@ -1,11 +1,9 @@
 const cron = require("node-cron");
 const { Op } = require("sequelize"); 
 const { Borrow } = require("../models"); // Import the Sequelize model
-const models = require("../models")
 const sendEmail = require("./mailer");
 require("dotenv").config();
 
-// console.log(models)
 
 // Function to send reminder emails (One day before return date)
 const sendReminders = async () => {
