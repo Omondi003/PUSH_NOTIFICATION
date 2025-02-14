@@ -1,14 +1,23 @@
 {
   "dependencies": {
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "fs": "^0.0.1-security",
+    "googleapis": "^144.0.0",
+    "mailtrap": "^3.4.0",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.10.0",
     "nodemon": "^3.1.9",
     "pg": "^8.13.1",
+    "push_notification": "file:",
+    "resend": "^4.1.2",
     "sequelize": "^6.37.5"
   },
   "name": "push_notification",
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
+    "migrate": "npx sequelize-cli db:migrate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

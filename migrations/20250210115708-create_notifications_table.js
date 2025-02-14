@@ -2,6 +2,7 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
+    await queryInterface.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";')
     await queryInterface.createTable('Borrows', {
       uuid: {
         allowNull: true,
@@ -26,11 +27,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      componentUUID: {
-        allowNull: false,
-        autoIncrement: true,
-        type: Sequelize.INTEGER
-      },
+
       quantity: {
         type: Sequelize.INTEGER,
         allowNull: false

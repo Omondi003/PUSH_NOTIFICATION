@@ -1,0 +1,5 @@
+# Ignoring the environment variable
+.env
+
+credentials.json
+node_modules
