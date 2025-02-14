@@ -4,11 +4,13 @@ const { Borrow }= require('../models/borrowedItems')
 const {sendReminders,sendOverdueAlerts,}= require('../controllers/cron_jobs')
 
 router.get('/', (req, res)=>{
-    sendReminders()
+    sendOverdueAlerts()
+
     res.send("Notification")
 })
 
 // Route to send reminder emails (triggered manually)
+
 // router.get('/send-reminders', async (req, res) => {
 //     try {
 //       await sendReminders(); // Call sendReminders function
