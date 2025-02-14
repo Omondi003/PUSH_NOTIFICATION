@@ -4,8 +4,8 @@ const { Borrow }= require('../models/borrowedItems')
 const {sendReminders,sendOverdueAlerts,}= require('../controllers/cron_jobs')
 
 router.get('/', (req, res)=>{
-    sendOverdueAlerts()
-
+    // sendOverdueAlerts()
+    sendReminders()
     res.send("Notification")
 })
 

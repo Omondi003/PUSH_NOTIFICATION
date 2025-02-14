@@ -50,7 +50,7 @@ const sendOverdueAlerts = async () => {
 
     if (overdueItems.length > 0) {
       const overdueList = overdueItems
-        .map((item) => `${item.borrowerContact} - ${item.itemName}`)
+        .map((item) => `${item.fullName} - ${item.borrowerContact}`)
         .join("\n");
 
       await sendEmail(
@@ -71,7 +71,9 @@ const sendOverdueAlerts = async () => {
  
 // Schedule cron jobs
 cron.schedule("0 9 * * *", sendReminders); // Run every day at 9 AM
-cron.schedule("0 10 * * *", sendOverdueAlerts); // Run every day at 10 AM
+// cron.schedule("0 10 * * *", sendOverdueAlerts); // Run every day at 10 AM
+cron.schedule("42 10 * * *", sendOverdueAlerts);
+
 
 module.exports={
     sendReminders,
