@@ -1,25 +1,20 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
+ 
+module.exports = (sequelize) => {
 
-
-const Overdue = sequelize.define(
-  "Overdue",
-  {
+  const Overdue = sequelize.define("Overdue", {
     borrowId: {
       type: DataTypes.UUID,
       allowNull: false,
-      primaryKey: true, // Ensures uniqueness
-      references: {
-        model: "Borrow",
-        key: "uuid",
-      },
+      primaryKey: true,
+      references: { model: "Borrow", key: "uuid" },
     },
+    fullName:{
+        type:DataTypes.STRING,
+        allowNull:false
+    }, 
 
-    fullName: {
-       type: DataTypes.STRING,
-       allowNull:false
-    },
-    
     borrowerContact: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -37,8 +32,7 @@ const Overdue = sequelize.define(
       allowNull: false,
       defaultValue: "In Progress",
     },
-  },
-  { timestamps: true }
-);
+  });
 
-module.exports = Overdue;
+  return Overdue;
+};

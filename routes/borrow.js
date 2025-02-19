@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Borrow } = require("../models"); // Import the Borrow model
+const { Borrow, Overdue} = require("../models"); // Import the Borrow model
 
 // Tesing if the router is functional
 router.get('/', (req,res)=>{
@@ -45,5 +45,8 @@ router.post("/borrow", async (req, res) => {
     return res.status(500).json({ error: "Failed to add borrow record" });
   }
 });
+
+ 
+
 
 module.exports = router;
