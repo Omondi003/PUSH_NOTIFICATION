@@ -1,71 +1,77 @@
-'use strict';
+"use strict";
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";')
-    await queryInterface.createTable('Borrows', {
+    await queryInterface.createTable("Borrows", {
       uuid: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.UUID,
-        // defaultValue: Sequelize.literal('uuid_generate_v4()'),
-        defaultValue: Sequelize.UUIDV4,
+        defaultValue: Sequelize.literal("uuid_generate_v4()"),
         primaryKey: true,
       },
       fullName: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+      },
+      itemName: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       borrowerContact: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       borrowerID: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       departmentName: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
-
       quantity: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
       },
       dateOfIssue: {
         type: Sequelize.DATE,
-        allowNull: false
+        allowNull: false,
       },
       expectedReturnDate: {
         type: Sequelize.DATE,
-        allowNull: false
+        allowNull: false,
       },
       actualReturnDate: {
         type: Sequelize.DATE,
-        allowNull: true
+        allowNull: true,
       },
       purpose: {
         type: Sequelize.TEXT,
-        allowNull: false
+        allowNull: false,
       },
       reasonForBorrowing: {
         type: Sequelize.TEXT,
-        allowNull: false
+        allowNull: false,
+      },
+      status: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: "Pending",
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('NOW()')
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('NOW()')
-      }
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+      },
     });
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Borrows');
-  }
+    await queryInterface.dropTable("Borrows");
+  },
 };

@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { Overdue, Borrow } = require("../models");
-const { appendFile } = require("fs");
-
+ 
 router.get('/', (req,res)=> {
   res.send("hello from overdue");
 }) 
@@ -11,7 +10,7 @@ router.get('/', (req,res)=> {
 router.get("/overdue", async (req, res) => {
   try {
     // Fetch overdue records
-    const overdueRecords = await Overdue.findAll({ where: { status: "In Progress" } });
+    const overdueRecords = await Overdue.findAll({ where: { status: "Checked" } });
 
     if (overdueRecords.length === 0) {
       return res.status(404).json({ message: "No overdue items found." });
@@ -20,10 +19,11 @@ router.get("/overdue", async (req, res) => {
     // Update status to "Checked" and actual return date to now
     const updatePromises = overdueRecords.map(async (record) => {
       // Update Overdue table status
-      await Overdue.update({ status: "Checked" }, { where: { borrowId: record.borrowId } });
+       await Overdue.update({ status: "In Progress" }, { where: { borrowUUID: record.borrowUUID } });
+
 
       // Update actualReturnDate in the Borrow table
-      await Borrow.update({ actualReturnDate: new Date() }, { where: { uuid: record.borrowId } });
+      await Borrow.update({ actualReturnDate: new Date() }, { where: { uuid: record.borrowUUID } });
     });
 
     await Promise.all(updatePromises);

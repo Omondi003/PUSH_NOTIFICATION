@@ -5,31 +5,32 @@ const sendEmail = require("./mailer");
 require("dotenv").config();
 
 
-// Function to send reminder emails (One day before return date)
-const sendReminders = async () => {
+// Function to save overdue users to their table
+const saveOverdue = async () => {
   try {
 
-    // Fetch borrowed items where the return date is one day away and not yet returned
-    const overdueItems = await Borrow.findAll({
-      where: {
-        expectedReturnDate: new Date(new Date().setDate(new Date().getDate() + 1)),
-        actualReturnDate: null, // Ensures the item is not yet returned
-      },
-    });
+   // Fetch items where the return date has passed and they haven't been returned
+   const overdueItems = await Borrow.findAll({
+    where: {
+      expectedReturnDate: { [Op.lt]: new Date() }, // Return date is before today
+      actualReturnDate: null, // Item has not been returned
+    },
+  });
 
-  
+      // console.log("The items are", overdueItems);
+
     if (overdueItems.length > 0) {
       for (let item of overdueItems) {
         // Check if the overdue record already exists in Overdue table
         const existingOverdue = await Overdue.findOne({
-          where: { borrowId: item.uuid },
+          where: { borrowUUID: item.uuid },
         });
 
         if (!existingOverdue) {
           // If the record does not exist, insert it to the table
 
           await Overdue.create({
-            borrowId: item.uuid,
+            borrowUUID: item.uuid,
             borrowerContact: item.borrowerContact,
             fullName:item.fullName,
             itemName: item.itemName,
@@ -38,13 +39,6 @@ const sendReminders = async () => {
           });
         }}
 
-
-
-      await sendEmail(
-        process.env.ADMIN_EMAIL,
-        "User Return Reminder",
-        `User ${item.borrowerContact} needs to return the item "${item.itemName}" by tomorrow.`
-      );
     }
   } catch (error) {
     console.error("Error fetching reminder data:", error);
@@ -86,12 +80,12 @@ const sendOverdueAlerts = async () => {
 
  
 // Schedule cron jobs
-cron.schedule("0 9 * * *", sendReminders); // Run every day at 9 AM
-// cron.schedule("0 10 * * *", sendOverdueAlerts); // Run every day at 10 AM
+cron.schedule("0 9 * * *", saveOverdue); // Run every day at 9 AM
+
 cron.schedule("42 10 * * *", sendOverdueAlerts);
 
 
 module.exports={
-    sendReminders,
+    saveOverdue,
     sendOverdueAlerts
 }

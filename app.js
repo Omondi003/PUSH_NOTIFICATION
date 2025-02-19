@@ -20,7 +20,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api', addBorrow)
 app.use('/api/borrow',addBorrow)
 app.use('/sendReminders', notificationRouter)
-app.use('/overdue', overdueRouter)
+app.use('/over', overdueRouter)
+app.use('/', notificationRouter)
 
 
 // Starting the server

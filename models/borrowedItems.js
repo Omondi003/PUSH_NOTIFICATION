@@ -21,6 +21,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      itemName : {
+        type:DataTypes.STRING,
+        allowNull:false
+
+      },
       borrowerContact: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -57,6 +62,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: false,
       },
+      status: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: "Pending",
+      },
+
     },
     {
       sequelize,

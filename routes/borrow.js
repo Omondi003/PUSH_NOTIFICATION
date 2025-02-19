@@ -13,6 +13,7 @@ router.post("/borrow", async (req, res) => {
   try {
     const {
       fullName,
+      itemName,
       borrowerContact,
       borrowerID,
       departmentName,
@@ -27,6 +28,7 @@ router.post("/borrow", async (req, res) => {
     // Insert data into the database
     const newBorrow = await Borrow.create({
       fullName,
+      itemName,
       borrowerContact,
       borrowerID,
       departmentName,
