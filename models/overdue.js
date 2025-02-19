@@ -8,19 +8,18 @@ const Overdue = sequelize.define(
     borrowId: {
       type: DataTypes.UUID,
       allowNull: false,
-      primaryKey: true,
+      primaryKey: true, // Ensures uniqueness
       references: {
         model: "Borrow",
         key: "uuid",
       },
     },
 
-    fullname :{
-             
-        type:DataTypes.STRING,
-        allowNull:false
-
+    fullName: {
+       type: DataTypes.STRING,
+       allowNull:false
     },
+    
     borrowerContact: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -36,7 +35,7 @@ const Overdue = sequelize.define(
     status: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: "In Progress", // Default status
+      defaultValue: "In Progress",
     },
   },
   { timestamps: true }

@@ -1,6 +1,6 @@
 const cron = require("node-cron");
 const { Op } = require("sequelize"); 
-const { Borrow } = require("../models"); // Import the Sequelize model
+const { Borrow, Overdue } = require("../models"); // Import the Sequelize model
 const sendEmail = require("./mailer");
 require("dotenv").config();
 
@@ -10,19 +10,35 @@ const sendReminders = async () => {
   try {
 
     // Fetch borrowed items where the return date is one day away and not yet returned
-    const borrowedItems = await Borrow.findAll({
+    const overdueItems = await Borrow.findAll({
       where: {
         expectedReturnDate: new Date(new Date().setDate(new Date().getDate() + 1)),
         actualReturnDate: null, // Ensures the item is not yet returned
       },
     });
 
-    for (let item of borrowedItems) {
-      await sendEmail(
-        item.borrowerContact, // Assuming this is the user's email
-        "Return Reminder",
-        `Reminder: Please return the borrowed item "${item.itemName}" by tomorrow.`
-      );
+  
+    if (overdueItems.length > 0) {
+      for (let item of overdueItems) {
+        // Check if the overdue record already exists in Overdue table
+        const existingOverdue = await Overdue.findOne({
+          where: { borrowId: item.uuid },
+        });
+
+        if (!existingOverdue) {
+          // If the record does not exist, insert it to the table
+
+          await Overdue.create({
+            borrowId: item.uuid,
+            borrowerContact: item.borrowerContact,
+            fullName:item.fullName,
+            itemName: item.itemName,
+            expectedReturnDate: item.expectedReturnDate,
+            status: "In Progress",
+          });
+        }}
+
+
 
       await sendEmail(
         process.env.ADMIN_EMAIL,
@@ -37,7 +53,7 @@ const sendReminders = async () => {
 
  
 
-// Function to notify admin of overdue items
+// Function to notify admin of overdue items and save them to the database.
 const sendOverdueAlerts = async () => {
   try {
     // Fetch items where the return date has passed and they haven't been returned
